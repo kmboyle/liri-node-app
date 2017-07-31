@@ -2,6 +2,9 @@ var keys = require("./keys.js");
 var request = require("request");
 var Spotify = require("node-spotify-api");
 var fs = require("fs");
+var Twitter = require("twitter");
+
+
 
 var spotify = new Spotify({
     id: "c623aae5da62434783c921614e70614f",
@@ -10,6 +13,7 @@ var spotify = new Spotify({
 
 //save keys in a variable keyList
 var keyList = keys.twitterKeys;
+
 //create variable for input
 var inputString = process.argv[2];
 //"song name" variable or "Movie" variable
@@ -41,14 +45,27 @@ switch (inputString) {
 
 function getTweets() {
     //show last 20 tweets and when they were created
+    var client = new Twitter({
+        consumer_key: keyList.consumer_key,
+        consumer_secret: keyList.consumer_secret,
+        access_token_key: keyList.access_token_key,
+        access_token_secret: keyList.access_token_secret
+    });
 
-    var access = keyList.access_token_key;
+    var params = { screen_name: 'WhySoSourDough' };
 
-    var url = "https://userstream.twitter.com/1.1/user.json";
+    // var url = "https://userstream.twitter.com/1.1/user.json";
 
-    request(url, function(err, res, data) {
-        console.log(JSON.stringify(data));
+    client.get('statuses/user_timeline', params, function(err, tweets, res) {
 
+        if (!err) {
+            for (var i = 0; i < 20; i++) {
+                console.log(tweets[i].text);
+                console.log(tweets[i].created_at);
+            }
+        } else {
+            console.log("No More Tweets!");
+        }
     });
 
 
