@@ -27,19 +27,23 @@ var random = "do-what-it-says";
 switch (inputString) {
     case tweets:
         getTweets();
+        saveCommand();
         break;
     case music:
         var songName = detail;
         //call spotify search function and pass the music search term along
         getMusic(songName);
+        saveCommand();
         break;
     case movie:
         var movieName = detail;
         //call the OMDB searh function and pass the movie search term along
         getMovie(movieName);
+        saveCommand();
         break;
     case random:
         getCommand();
+        saveCommand();
         break;
 }
 
@@ -92,8 +96,6 @@ function getMusic(songName) {
                     return console.log("Error occurred: " + err);
                 }
 
-                var result = data.tracks;
-                console.log(result);
                 var artist = data.tracks.items[0].artists[0].name;
                 var song = data.tracks.items[0].name;
                 var album = data.tracks.items[0].album.name;
@@ -171,15 +173,13 @@ function getMovie(movieName) {
                     ratings += `${Rating[i].Value} - ${Rating[i].Source}
         `;
                 }
-                console.log(`Title: ${Title}
+                console.log(`
+Title: ${Title}
 Year: ${Year} 
 Rating: ${ratings}
 Country: ${Country}
-
 Languages: ${Language}
-
 Plot: ${Plot}
-
 Actors: ${Actors}`);
             }
 
@@ -205,15 +205,13 @@ Actors: ${Actors}`);
                     ratings += `${Rating[i].Value} - ${Rating[i].Source}
         `;
                 }
-                console.log(`Title: ${Title}
+                console.log(`
+Title: ${Title}
 Year: ${Year} 
 Rating: ${ratings}
 Country: ${Country}
-
 Languages: ${Language}
-
 Plot: ${Plot}
-
 Actors: ${Actors}`);
             }
         });
@@ -233,7 +231,6 @@ function getCommand() {
         //update "inputString" variable and "detail" before running switch
         inputString = result[0];
         detail = result[1];
-        console.log("Line 221: " + inputString);
         if (inputString === music) {
             getMusic(detail);
         } else if (inputString === movie) {
@@ -244,6 +241,14 @@ function getCommand() {
 
     });
 
+}
+
+function saveCommand() {
+    fs.appendFile("log.txt", inputString + ", '" + detail + "'\n", function(err) {
+        if (err) {
+            return console.log(err);
+        }
+    })
 }
 
 /*****************
