@@ -4,8 +4,6 @@ var Spotify = require("node-spotify-api");
 var fs = require("fs");
 var Twitter = require("twitter");
 
-
-
 var spotify = new Spotify({
     id: "c623aae5da62434783c921614e70614f",
     secret: "0ec2650c4bb64e269215538f104dab02"
@@ -23,7 +21,7 @@ var tweets = "my-tweets";
 var music = "spotify-this-song";
 var movie = "movie-this";
 var random = "do-what-it-says";
-
+//switch to go through each command option
 switch (inputString) {
     case tweets:
         getTweets();
@@ -63,12 +61,11 @@ function getTweets() {
     client.get('statuses/user_timeline', params, function(err, tweets, res) {
 
         if (!err) {
-            for (var i = 0; i < 20; i++) {
+            //loop to display each tweet and time of tweet
+            for (var i = 0; i < tweets.length; i++) {
                 console.log(tweets[i].text);
-                console.log(tweets[i].created_at);
+                console.log(tweets[i].created_at + "\n");
             }
-        } else {
-            console.log("No More Tweets!");
         }
     });
 
