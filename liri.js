@@ -56,7 +56,7 @@ switch (inputString) {
         break;
     case random:
         getCommand();
-        saveCommand();
+
         break;
     default:
         console.log("Sorry, that is not a command");
@@ -246,11 +246,16 @@ function getCommand() {
         inputString = result[0];
         detail = result[1];
         if (inputString === music) {
-            getMusic(detail);
+            musicName = detail;
+            getMusic(musicName);
+            saveCommand();
         } else if (inputString === movie) {
-            getMovie(detail);
+            songName = detail;
+            getMovie(songName);
+            saveCommand();
         } else if (inputString === tweets) {
             getTweets();
+            saveCommand();
         }
 
     });
@@ -258,26 +263,47 @@ function getCommand() {
 }
 
 function saveCommand() {
-    if (songName) {
-        fs.appendFile("log.txt", inputString + ", " + songName + "\n", function(err) {
-            if (err) {
-                return console.log(err);
-            }
-        })
-    }
-    if (movieName) {
-        fs.appendFile("log.txt", inputString + ", " + movieName + "\n", function(err) {
-            if (err) {
-                return console.log(err);
-            }
-        })
-    } else {
+    if (movieName === undefined && songName === undefined) {
         fs.appendFile("log.txt", inputString + "\n", function(err) {
             if (err) {
                 return console.log(err);
             }
         })
 
+    } else if (songName) {
+        //get the format of the search back to a regular string
+        var fullName = songName.split("+");
+        console.log(fullName);
+        var full = "";
+        for (var i = 0; i < fullName.length; i++) {
+            if ((i + 1) !== fullName.length) {
+                full += fullName[i] + " ";
+            } else {
+                full += fullName[i];
+            }
+        }
+        fs.appendFile("log.txt", inputString + ", '" + full + "'\n", function(err) {
+            if (err) {
+                return console.log(err);
+            }
+        })
+    } else if (movieName) {
+        //get the format of the search back to a regular string
+        var fullName = movieName.split("+");
+        console.log(fullName);
+        var full = "";
+        for (var i = 0; i < fullName.length; i++) {
+            if ((i + 1) !== fullName.length) {
+                full += fullName[i] + " ";
+            } else {
+                full += fullName[i];
+            }
+        }
+        fs.appendFile("log.txt", inputString + ", '" + full + "'\n", function(err) {
+            if (err) {
+                return console.log(err);
+            }
+        })
     }
 
 }
