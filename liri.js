@@ -3,11 +3,11 @@ var request = require("request");
 var Spotify = require("node-spotify-api");
 var fs = require("fs");
 var Twitter = require("twitter");
-
+var spotifyKeys = keys.musicKeys;
 
 var spotify = new Spotify({
-    id: "c623aae5da62434783c921614e70614f",
-    secret: "0ec2650c4bb64e269215538f104dab02"
+    id: spotifyKeys.id,
+    secret: spotifyKeys.secret
 });
 
 //save keys in a variable keyList
@@ -56,7 +56,6 @@ switch (inputString) {
         break;
     case random:
         getCommand();
-
         break;
     default:
         console.log("Sorry, that is not a command");
@@ -85,9 +84,6 @@ function getTweets() {
             }
         }
     });
-
-
-
 }
 
 function getMusic(songName) {
@@ -98,7 +94,6 @@ function getMusic(songName) {
      * The album that the song is from
      * If no song is provided then your program will default to "The Sign" by Ace of Base.
      ****************/
-
     if (songName !== undefined) {
         spotify.search({
                 type: "track",
@@ -151,22 +146,16 @@ function getMusic(songName) {
 
 
 function getMovie(movieName) {
-
     /********************
-     * 
-     ```
-       * Title of the movie.
-       * Year the movie came out.
-       * IMDB Rating of the movie.
-       * Rotten Tomatoes Rating of the movie.
-       * Country where the movie was produced.
-       * Language of the movie.
-       * Plot of the movie.
-       * Actors in the movie.
-       *
-     ```
-       * If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
-
+     * Title of the movie.
+     * Year the movie came out.
+     * IMDB Rating of the movie.
+     * Rotten Tomatoes Rating of the movie.
+     * Country where the movie was produced.
+     * Language of the movie.
+     * Plot of the movie.
+     * Actors in the movie.
+     * If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
      ********************/
     var key = "40e9cece";
     var queryURL = "http://www.omdbapi.com/?t=" + movieName + "&apikey=" + key;
@@ -241,6 +230,7 @@ function getCommand() {
         if (err) {
             return console.log(err);
         }
+        //split the array into command and search term
         var result = data.split(",");
         //update "inputString" variable and "detail" before running switch
         inputString = result[0];
@@ -263,6 +253,13 @@ function getCommand() {
 }
 
 function saveCommand() {
+    /*****************
+    ### BONUS
+    * In addition to logging the data to your terminal/bash window, output the data to a .txt file called `log.txt`.
+    * Make sure you append each command you run to the `log.txt` file. 
+    * Do not overwrite your file each time you run a command.
+     ******************/
+    //writes just the command if there is no search term included
     if (movieName === undefined && songName === undefined) {
         fs.appendFile("log.txt", inputString + "\n", function(err) {
             if (err) {
@@ -273,7 +270,6 @@ function saveCommand() {
     } else if (songName) {
         //get the format of the search back to a regular string
         var fullName = songName.split("+");
-        console.log(fullName);
         var full = "";
         for (var i = 0; i < fullName.length; i++) {
             if ((i + 1) !== fullName.length) {
@@ -282,6 +278,7 @@ function saveCommand() {
                 full += fullName[i];
             }
         }
+        //writes command and search term
         fs.appendFile("log.txt", inputString + ", '" + full + "'\n", function(err) {
             if (err) {
                 return console.log(err);
@@ -299,6 +296,7 @@ function saveCommand() {
                 full += fullName[i];
             }
         }
+        //writes command and search term
         fs.appendFile("log.txt", inputString + ", '" + full + "'\n", function(err) {
             if (err) {
                 return console.log(err);
@@ -307,16 +305,3 @@ function saveCommand() {
     }
 
 }
-
-
-/*****************
- * 
-### BONUS
-
-* In addition to logging the data to your terminal/bash window, output the data to a .txt file called `log.txt`.
-
-* Make sure you append each command you run to the `log.txt` file. 
-
-* Do not overwrite your file each time you run a command.
-
- ******************/
