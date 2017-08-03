@@ -15,7 +15,7 @@ var keyList = keys.twitterKeys;
 //create variable for input
 var inputString = process.argv[2];
 //"song name" variable or "Movie" variable
-var detail = process.argv[3];
+var detail = process.argv;
 //defining commands
 var tweets = "my-tweets";
 var music = "spotify-this-song";
@@ -28,13 +28,27 @@ switch (inputString) {
         saveCommand();
         break;
     case music:
-        var songName = detail;
+        var songName = "";
+        for (var i = 3; i < detail.length; i++) {
+            if (i > 3 && i < detail.length) {
+                songName = songName + "+" + detail[i];
+            } else {
+                songName += detail[i];
+            }
+        }
         //call spotify search function and pass the music search term along
         getMusic(songName);
         saveCommand();
         break;
     case movie:
-        var movieName = detail;
+        var movieName = "";
+        for (var i = 3; i < detail.length; i++) {
+            if (i > 3 && i < detail.length) {
+                movieName = movieName + "+" + detail[i];
+            } else {
+                movieName += detail[i];
+            }
+        }
         //call the OMDB searh function and pass the movie search term along
         getMovie(movieName);
         saveCommand();
@@ -43,6 +57,8 @@ switch (inputString) {
         getCommand();
         saveCommand();
         break;
+    default:
+        console.log("Sorry, that is not a command");
 }
 
 function getTweets() {
@@ -92,7 +108,7 @@ function getMusic(songName) {
                 if (err) {
                     return console.log("Error occurred: " + err);
                 }
-
+                console.log(data);
                 var artist = data.tracks.items[0].artists[0].name;
                 var song = data.tracks.items[0].name;
                 var album = data.tracks.items[0].album.name;
@@ -241,7 +257,7 @@ function getCommand() {
 }
 
 function saveCommand() {
-    fs.appendFile("log.txt", inputString + ", '" + detail + "'\n", function(err) {
+    fs.appendFile("log.txt", inputString + "\n", function(err) {
         if (err) {
             return console.log(err);
         }
