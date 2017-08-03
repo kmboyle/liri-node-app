@@ -4,6 +4,7 @@ var Spotify = require("node-spotify-api");
 var fs = require("fs");
 var Twitter = require("twitter");
 
+
 var spotify = new Spotify({
     id: "c623aae5da62434783c921614e70614f",
     secret: "0ec2650c4bb64e269215538f104dab02"
@@ -108,7 +109,6 @@ function getMusic(songName) {
                 if (err) {
                     return console.log("Error occurred: " + err);
                 }
-                console.log(data);
                 var artist = data.tracks.items[0].artists[0].name;
                 var song = data.tracks.items[0].name;
                 var album = data.tracks.items[0].album.name;
@@ -171,6 +171,7 @@ function getMovie(movieName) {
     var key = "40e9cece";
     var queryURL = "http://www.omdbapi.com/?t=" + movieName + "&apikey=" + key;
     if (movieName !== undefined) {
+
         request(queryURL, function(err, res, data) {
             if (!err && res.statusCode === 200) {
                 var result = JSON.parse(data);
@@ -257,12 +258,30 @@ function getCommand() {
 }
 
 function saveCommand() {
-    fs.appendFile("log.txt", inputString + "\n", function(err) {
-        if (err) {
-            return console.log(err);
-        }
-    })
+    if (songName) {
+        fs.appendFile("log.txt", inputString + ", " + songName + "\n", function(err) {
+            if (err) {
+                return console.log(err);
+            }
+        })
+    }
+    if (movieName) {
+        fs.appendFile("log.txt", inputString + ", " + movieName + "\n", function(err) {
+            if (err) {
+                return console.log(err);
+            }
+        })
+    } else {
+        fs.appendFile("log.txt", inputString + "\n", function(err) {
+            if (err) {
+                return console.log(err);
+            }
+        })
+
+    }
+
 }
+
 
 /*****************
  * 
