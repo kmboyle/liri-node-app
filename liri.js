@@ -13,6 +13,8 @@ var spotify = new Spotify({
 //save keys in a variable keyList
 var keyList = keys.twitterKeys;
 
+var omdbKey = keys.omdb;
+
 //create variable for input
 var inputString = process.argv[2];
 //"song name" variable or "Movie" variable
@@ -157,7 +159,7 @@ function getMovie(movieName) {
      * Actors in the movie.
      * If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
      ********************/
-    var key = "40e9cece";
+    var key = keys.movieKey;
     var queryURL = "http://www.omdbapi.com/?t=" + movieName + "&apikey=" + key;
     if (movieName !== undefined) {
 
