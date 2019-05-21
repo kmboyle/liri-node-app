@@ -70,7 +70,7 @@ function getTweets() {
         access_token_secret: keyList.access_token_secret
     });
 
-    var params = { screen_name: 'WhySoSourDough' };
+    var params = { screen_name: keylist.screen_name };
 
     // var url = "https://userstream.twitter.com/1.1/user.json";
 
